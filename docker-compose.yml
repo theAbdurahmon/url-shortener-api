@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db-url-shortener
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: "0000"
+      POSTGRES_DB: url_shortener
+volumes:
+  db_data:
