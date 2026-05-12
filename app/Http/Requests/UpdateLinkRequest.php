@@ -24,11 +24,12 @@ class UpdateLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "original_url" => "required|string|url:http,https",
-            "slug" => "string|unique:users,slug",
-            "title" => "string",
+            "original_url" => "string|url:http,https",
+            "slug" => "regex:/[a-zA-Z]/|regex:/[0-9]/|min:6|max:12",
+            "title" => "string|min:3",
             "expires_at" => Rule::date()->format("Y-m-d"),
-            "click_limit" => "integer",
+            "password" => "string|min:6",
+            "click_limit" => "integer:strict",
         ];
     }
 }
