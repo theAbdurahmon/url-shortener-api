@@ -11,5 +11,14 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: "0000"
       POSTGRES_DB: url_shortener
+  redis:
+     image: redis:latest
+     container_name: redis-for-url-shortener
+     restart: on-failure
+     ports:
+       - "6379:6379"
+     volumes:
+       - redis_data:/data
 volumes:
   db_data:
+  redis_data:
