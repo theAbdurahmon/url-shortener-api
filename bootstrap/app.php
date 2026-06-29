@@ -1,9 +1,13 @@
 <?php
 
+use App\Exceptions\LinkExpiredException;
+use App\Exceptions\LinkInactiveException;
+use App\Exceptions\RequiredPasswordLinkException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Exceptions\InvalidSlugException;
+use Illuminate\Http\JsonResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,11 +17,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->trustProxies(at: "*");
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(fn() => true);
-        $exceptions->render(function(InvalidSlugException $e) {
+        $exceptions->render(function(InvalidSlugException $e): JsonResponse {
             return response()->json($e->errorMessage(), 400);
+        });
+        $exceptions->render(function(LinkInactiveException $e) {
+           abort(403);
+        });
+        $exceptions->render(function (LinkExpiredException $e) {
+           abort(410);
+        });
+        $exceptions->render(function(RequiredPasswordLinkException $e): JsonResponse {
+            return response()->json($e->errorMessage(), 403); 
         });
     })->create();
