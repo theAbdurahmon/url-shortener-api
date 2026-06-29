@@ -15,13 +15,12 @@ class LinkResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
             "original_url" => $this->original_url,
             "slug" => $this->slug,
             "title" => $this->title,
             "expires_at" => $this->expires_at,
-            "clicks_limit" => $this->click_limit,
-            "clicks_count" => $this->clicks_count
+            "password" => $this->password,
+            "click_limit" => $this->click_limit,
         ];
     }
 }

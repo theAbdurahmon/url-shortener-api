@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLinkRequest;
 use App\Http\Requests\UpdateLinkRequest;
+use App\Repositories\LinkRepository;
 use App\Services\LinkService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -12,14 +13,17 @@ use Illuminate\Http\Response;
 class LinkController extends Controller
 {
     public function __construct(
-        private LinkService $linkService
-        ){}
+        private LinkService $linkService,
+        private LinkRepository $linkRepository
+    ) {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): ResourceCollection
     {
-        return $this->linkService->getAllData()->toResourceCollection();
+        return $this->linkRepository->getAll($this->currentAuthUser())->toResourceCollection();
     }
 
     /**
@@ -27,7 +31,7 @@ class LinkController extends Controller
      */
     public function store(StoreLinkRequest $request): JsonResource
     {
-        return $this->linkService->create($request->safe()->all())->toResource();
+        return $this->linkService->create($request->safe()->all(), $this->currentAuthUser())->toResource();
     }
 
     /**
@@ -35,23 +39,23 @@ class LinkController extends Controller
      */
     public function show(string $id): JsonResource
     {
-        return $this->linkService->getLink($id)->toResource();
+        return $this->linkRepository->get($id, $this->currentAuthUser())->toResource();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLinkRequest $request, string $id): JsonResource
+    public function update(UpdateLinkRequest $request, string $slug): JsonResource
     {
-        return $this->linkService->update($request->safe()->all(), $id)->toResource();
+        return $this->linkService->update($request->safe()->all(), $slug, $this->currentAuthUser())->toResource();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): Response
+    public function destroy(string $slug): Response
     {
-        $this->linkService->delete($id);
+        $this->linkRepository->delete($slug, $this->currentAuthUser());
         return response()->noContent();
     }
 }

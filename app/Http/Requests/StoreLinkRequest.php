@@ -24,7 +24,6 @@ class StoreLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id" => "required|exists:users,id",
             "original_url" => "required|url:http,https",
             "slug" => "regex:/[a-zA-Z]/|regex:/[0-9]/|min:6|max:12|unique:links,slug",
             "title" => "string|min:3",
