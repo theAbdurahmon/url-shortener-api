@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\LinkRepository;
-use App\Services\DateFormat;
 
 class PreviewController extends Controller
 {
     public function __construct(
         private LinkRepository $linkRepository,
-        private DateFormat $dateFormat
-    ) {}
+    ) {
+    }
 
 
     public function __invoke(string $slug)
