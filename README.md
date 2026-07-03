@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔗 URL Shortener
+# 🔗 URL Shortener Api
 
 **A high-performance Laravel URL shortener with analytics, Redis caching, and async click tracking.**
 
