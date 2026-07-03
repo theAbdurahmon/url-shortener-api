@@ -30,9 +30,10 @@ services:
         volumes:
             - db_data:/var/lib/postgresql
         environment:
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: "0000"
-            POSTGRES_DB: url_shortener
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_DATABASE}
+
     redis:
         image: redis:latest
         container_name: redis-for-url-shortener
